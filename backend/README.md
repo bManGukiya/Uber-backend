@@ -209,3 +209,119 @@ Authorization: Bearer jwt_token
     "message": "Logout successfully"
   }
   ```
+
+# Captain Registration Endpoint
+
+## POST /captains/register
+
+### Description
+This endpoint is used to register a new captain. It validates the input data and creates a new captain in the database.
+
+### Request Body
+The request body should be a JSON object containing the following fields:
+- `fullname`: An object containing:
+  - `firstname` (string, required): The first name of the captain. Must be at least 3 characters long.
+  - `lastname` (string, optional): The last name of the captain. Must be at least 3 characters long.
+- `email` (string, required): The email address of the captain. Must be a valid email format.
+- `password` (string, required): The password for the captain. Must be at least 6 characters long.
+- `vehicle`: An object containing:
+  - `color` (string, required): The color of the vehicle. Must be at least 3 characters long.
+  - `plate` (string, required): The plate number of the vehicle. Must be at least 3 characters long.
+  - `capacity` (number, required): The capacity of the vehicle. Must be at least 1.
+  - `vehicaltype` (string, required): The type of the vehicle. Must be one of `car`, `bike`, or `auto`.
+
+### Example Request
+```json
+{
+  "fullname": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  },
+  "email": "jane.doe@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicaltype": "car"
+  }
+}
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 201 Created
+- **Response Body**:
+  ```json
+  {
+    "token": "jwt_token_here",
+    "captain": {
+      "_id": "captain_id_here",
+      "fullname": {
+        "firstname": "Jane",
+        "lastname": "Doe"
+      },
+      "email": "jane.doe@example.com",
+      "vehicle": {
+        "color": "Red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicaltype": "car"
+      }
+    }
+  }
+  ```
+
+#### Validation Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Invalid Email",
+        "param": "email",
+        "location": "body"
+      },
+      {
+        "msg": "First name must be 3 characters",
+        "param": "fullname.firstname",
+        "location": "body"
+      },
+      {
+        "msg": "Password must be 6 characters long",
+        "param": "password",
+        "location": "body"
+      },
+      {
+        "msg": "Color must be 3 characters long",
+        "param": "vehicle.color",
+        "location": "body"
+      },
+      {
+        "msg": "Plate must be 3 characters long",
+        "param": "vehicle.plate",
+        "location": "body"
+      },
+      {
+        "msg": "Capacity must be 1 character long",
+        "param": "vehicle.capacity",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+#### Missing Fields
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "All fields are required"
+      }
+    ]
+  }
+  ```
