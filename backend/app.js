@@ -11,8 +11,8 @@ const cookieparser = require('cookie-parser');
 
 connectTodb();
 app.use(cors()); // get some perticular domain which is given in cors and other domains are blocked
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.json()); // work with json data
+app.use(express.urlencoded({extended:true})); // to get the data from the form
 app.use(cookieparser()); // to get the cookie from the browser
 
 app.use('/users',userRoutes);

@@ -116,7 +116,7 @@ The request body should be a JSON object containing the following fields:
         "firstname": "John",
         "lastname": "Doe"
       },
-      "email": "john.doe@example.com"
+        "email": "john.doe@example.com"
     }
   }
   ```
@@ -325,3 +325,48 @@ The request body should be a JSON object containing the following fields:
     ]
   }
   ```
+
+# Captain Login Endpoint
+
+## POST /captain/login
+
+**Description:** Login a captain.
+
+**Request Body:**
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+**Responses:**
+- `200 OK`: Returns the token and user information.
+- `400 Bad Request`: Validation errors.
+- `401 Unauthorized`: Invalid email or password.
+
+# Captain Profile Endpoint
+
+## GET /captain/profile
+
+**Description:** Get the profile of the logged-in captain.
+
+**Headers:**
+- `Authorization: Bearer <token>`
+
+**Responses:**
+- `200 OK`: Returns the captain's profile.
+- `401 Unauthorized`: If the token is missing or invalid.
+
+# Captain Logout Endpoint
+
+## GET /captain/logout
+
+**Description:** Logout the captain.
+
+**Headers:**
+- `Authorization: Bearer <token>`
+
+**Responses:**
+- `200 OK`: Logout successful.
+- `401 Unauthorized`: If the token is missing or invalid.

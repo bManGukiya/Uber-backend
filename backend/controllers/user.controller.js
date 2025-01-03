@@ -50,8 +50,7 @@ module.exports.loginUser = async(req,res)=>{
     }
     const token = user.generateJwtToken();
 
-    res.cookie('token',token); // set cookie in browser
-    // response
+    res.cookie('token',token); // set cookie in browser response
     res.status(200).json({token, user});
 }
 
