@@ -370,3 +370,256 @@ The request body should be a JSON object containing the following fields:
 **Responses:**
 - `200 OK`: Logout successful.
 - `401 Unauthorized`: If the token is missing or invalid.
+
+# Create Ride Endpoint
+
+## POST /rides/create-ride
+
+### Description
+This endpoint is used to create a new ride. It validates the input data and creates a new ride in the database.
+
+### Request Body
+The request body should be a JSON object containing the following fields:
+- `pickup` (string, required): The pickup location of the ride.
+- `destination` (string, required): The destination location of the ride.
+- `vehicaltype` (string, required): The type of vehicle for the ride. Must be one of `auto`, `motorcycle`, or `car`.
+
+### Example Request
+```json
+{
+  "pickup": "Location A",
+  "destination": "Location B",
+  "vehicaltype": "car"
+}
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 201 Created
+- **Response Body**:
+  ```json
+  {
+    "_id": "ride_id_here",
+    "user": "user_id_here",
+    "pickup": "Location A",
+    "destination": "Location B",
+    "fare": 100,
+    "status": "pending",
+    "otp": "123456"
+  }
+  ```
+
+#### Validation Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Pickup location is required",
+        "param": "pickup",
+        "location": "body"
+      },
+      {
+        "msg": "Destination location is required",
+        "param": "destination",
+        "location": "body"
+      },
+      {
+        "msg": "Invalid vehical type",
+        "param": "vehicaltype",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+# Get Fare Endpoint
+
+## GET /rides/get-fare
+
+### Description
+This endpoint is used to get the fare for a ride based on the pickup and destination locations.
+
+### Query Parameters
+- `pickup` (string, required): The pickup location of the ride.
+- `destination` (string, required): The destination location of the ride.
+
+### Example Request
+```
+GET /rides/get-fare?pickup=Location+A&destination=Location+B
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "auto": "50.00",
+    "motorcycle": "40.00",
+    "car": "60.00"
+  }
+  ```
+
+#### Validation Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Pickup and destination are required"
+      }
+    ]
+  }
+  ```
+
+# Get Coordinates Endpoint
+
+## GET /maps/get-coordinates
+
+### Description
+This endpoint is used to get the coordinates (latitude and longitude) of a location.
+
+### Query Parameters
+- `location` (string, required): The name of the location.
+
+### Example Request
+```
+GET /maps/get-coordinates?location=New+York
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "latitude": 40.7128,
+    "longitude": -74.0060
+  }
+  ```
+
+#### Validation Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Location name is required",
+        "param": "location",
+        "location": "query"
+      }
+    ]
+  }
+  ```
+
+# Get Distance and Time Endpoint
+
+## GET /maps/get-distance
+
+### Description
+This endpoint is used to get the distance and estimated time between two locations.
+
+### Query Parameters
+- `origin` (string, required): The origin location.
+- `destination` (string, required): The destination location.
+
+### Example Request
+```
+GET /maps/get-distance?origin=Location+A&destination=Location+B
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "distance": {
+      "fixedDistance": "10.00",
+      "value": 10000
+    },
+    "time": {
+      "time": "0 hours 10 minutes",
+      "value": 10
+    },
+    "status": "OK"
+  }
+  ```
+
+#### Validation Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Origin must be 3 characters",
+        "param": "origin",
+        "location": "query"
+      },
+      {
+        "msg": "Destination must be 3 characters",
+        "param": "destination",
+        "location": "query"
+      }
+    ]
+  }
+  ```
+
+# Get Suggestions Endpoint
+
+## GET /maps/get-suggestion
+
+### Description
+This endpoint is used to get location suggestions based on an input query.
+
+### Query Parameters
+- `input` (string, required): The input query for location suggestions.
+
+### Example Request
+```
+GET /maps/get-suggestion?input=New
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  [
+    {
+      "display_name": "New York, USA",
+      "latitude": 40.7128,
+      "longitude": -74.0060
+    },
+    {
+      "display_name": "New Delhi, India",
+      "latitude": 28.6139,
+      "longitude": 77.2090
+    }
+  ]
+  ```
+
+#### Validation Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Input must be 3 characters",
+        "param": "input",
+        "location": "query"
+      }
+    ]
+  }
+  ```
